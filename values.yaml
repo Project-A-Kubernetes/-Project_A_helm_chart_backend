@@ -30,14 +30,16 @@ securityContext:
 service:
   type: ClusterIP
   port: 8000
+  label: backend-app
+  portName: backend-http
 
 resources: 
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 300m
+    memory: 328Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 200m
+    memory: 256Mi
 
 # This is to setup the startup,liveness and readiness probes
 startupProbe:
@@ -66,23 +68,31 @@ readinessProbe:
 autoscaling:
   enabled: true
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 10
   targetCPUUtilizationPercentage: 70 #We scale pod when the cpu resource of the pods get to 70%
   targetMemoryUtilizationPercentage: 70 #we scale pods when the memory usage gets to 70% 
-network:
-  enabled: true 
-  backendName: "" 
-  frontendName: ""
-  port: 8080
-# Additional volumes on the output Deployment definition.
-volumes: []
-  # - name: foo
-  #   secret:
-  #     secretName: mysecret
-  #     optional: false
+  stabilizeWindowSecondsScaleUp: 30
+  selectPolicy: Max 
+  policiesUp:
+    - type: Percent
+      value: 50
+      periodSeconds: 60
+    - type: Pods
+      value: 4
+      periodSeconds: 60
+  stabilizeWindowSecondsScaleDown: 300
+  policiesDown:
+    - type: Percent
+      value: 20
+      periodSeconds: 60
+    - type: Pods
+      value: 1
+      periodSeconds: 60
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-  # - name: foo
-  #   mountPath: "/etc/foo"
-  #   readOnly: true
+
+servicemonitor:
+  create: true 
+  name: project-a-servicemonitor-backend
+  namespace: monitor
+  labels: kube-prometheus-stack
+  matchName: prod
