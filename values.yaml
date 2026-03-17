@@ -3,44 +3,38 @@
 image:
   repository: 430695042840.dkr.ecr.us-east-1.amazonaws.com/project_a_kubernetes_backend
   pullPolicy: IfNotPresent
-  tag: sha-0c464b9
+  tag: sha-97a323e
 nameOverride: "backend"
 fullnameOverride: "project-a-helm-backend"
-
 serviceAccount:
-  create: true 
-  annotations: 
+  create: true
+  annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::430695042840:role/kube-SA-OIDC
-
 # This is for setting Kubernetes Annotations to a Pod.
 podAnnotations: {}
 # This is for setting Kubernetes Labels to a Pod.
 podLabels: {}
-
 #defining pod level security... least privilledge and blast radius control
-securityContext: 
-   capabilities:
-     drop:
-     - ALL
-   readOnlyRootFilesystem: true
-   runAsNonRoot: true
-   runAsUser: 400
-
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 400
 # This is for setting up a service
 service:
   type: ClusterIP
   port: 8000
   label: backend-app
   portName: backend-http
-
-resources: 
+resources:
   limits:
     cpu: 300m
     memory: 328Mi
   requests:
     cpu: 200m
     memory: 256Mi
-
 # This is to setup the startup,liveness and readiness probes
 startupProbe:
   httpGet:
@@ -72,7 +66,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 70 #We scale pod when the cpu resource of the pods get to 70%
   targetMemoryUtilizationPercentage: 70 #we scale pods when the memory usage gets to 70% 
   stabilizeWindowSecondsScaleUp: 30
-  selectPolicy: Max 
+  selectPolicy: Max
   policiesUp:
     - type: Percent
       value: 50
@@ -88,10 +82,8 @@ autoscaling:
     - type: Pods
       value: 1
       periodSeconds: 60
-
-
 servicemonitor:
-  create: true 
+  create: true
   name: project-a-servicemonitor-backend
   namespace: monitor
   labels: kube-prometheus-stack
