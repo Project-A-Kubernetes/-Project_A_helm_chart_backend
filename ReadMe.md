@@ -28,6 +28,7 @@ It supports full lifecycle management of the backend application, including depl
 * HPA
 * ServiceMonitor
 * serviceAccount
+* Database Created with Terraform 
 * ArgoCD Application
 
 ---
@@ -170,7 +171,13 @@ kubectl create secret docker-registry ecr-secret \
 * Grant least-privilege access (ECR pullOnly)
 
 ---
+## Database 
+### database configuration
 
+- The database was automated and created with terraform .
+- database is connected to the cluster 
+- still working on this now ...
+---
 ## Ingress Security Hardening
 **Route Traffic from ingress at PATH /api to my backend service**
 Recommended annotations:
