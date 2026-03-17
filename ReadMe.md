@@ -275,6 +275,7 @@ Future improvements:
 * Service mesh (Istio / Linkerd)
 * Cluster Autoscaler 
 * Blue and Green Release
+* Network Policy
 
 ---
 
@@ -300,3 +301,5 @@ This Helm chart delivers a **production-ready backend platform** with:
 * GitOps-driven deployments
 
 Designed to reflect **real-world DevOps engineering standards** used in production environments.
+
+## Project-A
