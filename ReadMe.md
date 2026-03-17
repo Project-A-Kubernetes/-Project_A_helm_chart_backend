@@ -248,7 +248,7 @@ groups:
 ---
 > **Note:** Check [`project-a-observability` ](https://github.com/Project-A-Kubernetes/Project_A_Observability.git) for the observability Helm chart that is automated with Argocd.
 ---
-> **Important** Check [`project-a-cluster-stacks-tools` ](https://github.com/Project-A-Kubernetes/Project_A_Observability.git) for the monitoring stacks, networking and security Helm chart automated with Argocd.
+> **Important** Check [`project-a-cluster-stacks-tools` ](https://github.com/Project-A-Kubernetes/Project_A_STACKS_TOOLS.git) for the monitoring stacks, networking and security Helm chart automated with Argocd.
 
 ---
 ## Deployment Commands
