@@ -1,4 +1,4 @@
-# backend Helm Chart
+# Backend Helm Chart
 
 ## Overview
 
@@ -37,7 +37,7 @@ It supports full lifecycle management of the backend application, including depl
 
 ---
 ### Diagram of Argocd watching and syncing cluster
-![Kubernetes Architecture](images/images4.png)
+![Kubernetes Architecture](images/image4.png)
 
 ---
 
@@ -149,7 +149,7 @@ spec:
 ---
 ## Auto updated Helm Chart diagram
 * With CICD we update the helm repo after images has been built and push to ecr automatically
-![Kubernetes Architecture](images/image2.png)
+![Kubernetes Architecture](images/image3.png)
 
 ## AWS ECR + IRSA Integration
 
