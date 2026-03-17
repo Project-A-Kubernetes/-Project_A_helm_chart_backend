@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: project-a-frontend
+  name: project-a-backend
   namespace: argocd
 
 spec:
