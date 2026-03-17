@@ -244,6 +244,12 @@ groups:
 ---
 ### Picture of Alert when issue was resolved and Alert stop firing 
 ![Kubernetes Observability Architecture](images/image7.png)
+
+---
+> **Note:** Check [`project-a-observability` ](https://github.com/Project-A-Kubernetes/Project_A_Observability.git) for the observability Helm chart that is automated with Argocd.
+---
+> **Important** Check [`project-a-cluster-stacks-tools` ](https://github.com/Project-A-Kubernetes/Project_A_Observability.git) for the monitoring stacks, networking and security Helm chart automated with Argocd.
+
 ---
 ## Deployment Commands
 
