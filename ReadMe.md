@@ -223,7 +223,21 @@ groups:
 * Visualized in Grafana dashboards
 
 ---
+### Picture of prometheus rule configured and backend service discovey
+![Kubernetes Observability Architecture](images/image.png)
 
+- This prometheus rule send alert to slack channel when pod is crashing or
+- when pod CPU and memory Usage exceed limits defined in the **resources:**
+- It Collects metrics and send ALERT when our SLO is **violated** to slack teams or pagerduty if configured
+---
+
+### Picture of  Alert firing during Violated SLI,SLO,burn rate 
+![Kubernetes Observability Architecture](images/image6.png)
+
+---
+### Picture of Alert when issue was resolved and Alert stop firing 
+![Kubernetes Observability Architecture](images/image7.png)
+---
 ## Deployment Commands
 
 ```bash
