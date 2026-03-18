@@ -44,7 +44,10 @@ spec:
               protocol: TCP
           env:
             - name: DATABASE_URL
-              value: mysql+pymysql://testuser:testpass@mysql:3306/testdb
+              valueFrom:
+                secretKeyRef:
+                  name: backend-db-secret
+                  key: DATABASE_URL
           
           {{- with .Values.startupProbe}}
           startupProbe:
