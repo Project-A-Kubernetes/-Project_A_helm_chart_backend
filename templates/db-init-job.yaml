@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "project_A_helm_backend.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade    # Run before Helm install/upgrade
+    "helm.sh/hook-weight": "0"                 # Ensures early execution
+    "helm.sh/hook-delete-policy": hook-succeeded # delete the resources once job is complete
+    #running a database migration
+    #What this job do? : it just access my RDS and create a database in it for my backend application before my backend pods is installed
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-init
+        image:  python:3.11     
+        command: ["python", "-c"]
+        args:
+          - |
+            import subprocess, sys
+            import os
+            # Install dependencies (for testing; use pre-built image in production)
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "pymysql", "cryptography"])
+
+            import pymysql, os
+
+            DB_HOST = os.environ["DB_HOST"]
+            DB_USER = os.environ["DB_USER"]
+            DB_PASSWORD = os.environ["DB_PASSWORD"]
+            DB_NAME = os.environ.get("DB_NAME", "jobs_db")
+
+            try:
+                with pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD) as conn:
+                    with conn.cursor() as cursor:
+                        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME};")
+                print(f"Database {DB_NAME} created successfully!")
+            except Exception as e:
+                print(f"Failed to create database: {e}")
+                raise e
+        #secrets  already available in cluster so yours should be available or use external secret operator :)
+        env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: backend-db-secret
+                key: DATABASE_HOST
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: backend-db-secret
+                key: DATABASE_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backend-db-secret
+                key: DATABASE_PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: backend-db-secret
+                key: DATABASE_NAME
+      restartPolicy: Never
+  backoffLimit: 1
