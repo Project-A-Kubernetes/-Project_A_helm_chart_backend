@@ -4,15 +4,15 @@
 
 This repository contains a **production-grade Helm chart** for deploying the backend component of Project A on Kubernetes. The chart is designed with **scalability, security, observability, and GitOps practices** in mind.
 
-It supports full lifecycle management of the backend application, including deployment, networking, TLS, autoscaling, monitoring, and continuous delivery via ArgoCD just like my frontend.
+It supports full lifecycle management of the backend application, including deployment, networking, TLS, autoscaling, monitoring, and continuous delivery via ArgoCD.
 
 ---
 
 ## Key Features
 
 * Kubernetes-native deployment (Deployment, Service, hpa)
-* Horizontal Pod Autoscaling (HPA)
-* serviceAccount(Role) for short live access to AWS
+* Horizontal Pod Autoscaling (HPA) to dynamically scale workloads based on resource utilization and reduce operational cost
+* serviceAccount(Role) for short lived access to AWS
 * Prometheus monitoring via ServiceMonitor
 * GitOps-ready with ArgoCD Application
 * Secrets configured with external secret operator
@@ -149,7 +149,7 @@ spec:
 
 ---
 ## Auto updated Helm Chart diagram
-* With CICD we update the helm repo after images has been built and push to ecr automatically
+**With CICD we update the helm repo after images has been built and push to ecr automatically**
 ![Kubernetes Architecture](images/image3.png)
 
 ## AWS ECR + IRSA Integration
@@ -203,9 +203,10 @@ nginx.ingress.kubernetes.io/limit-rps: "5" #change to desire
 
 ---
 ## Observability & Alerting
--   monitoring: we collect Prometheus metrics for container health, CPU, memory, and request  rates
--   Alerts configured for errors rate, success rate, or failed deployments (SLI, SLO, Error Budget, Burn rate)
-
+- Metrics collected via Prometheus for CPU, memory, request rate, and application health
+- ServiceMonitor used for automatic service discovery
+- Alerts defined using PrometheusRule based on SLI/SLO thresholds
+- Integrated with alerting channels (Slack / PagerDuty)
 ---
 
 ### Prometheus Alert Example
@@ -269,11 +270,9 @@ argocd app create -f <Application_Name>
 
 ## Release Strategy
 
-* Follow **SHA- commit versioning and latest label**
-* Separate:
-
-  * Chart version (`Chart.yaml`)
-  * App version (`appVersion`)
+- Image versioning based on Git commit SHA for traceability
+- Optional `latest` tag for development environments only
+- Separation of Helm chart version (`Chart.yaml`) and application version (`appVersion`)
 
 ---
 
@@ -308,12 +307,11 @@ Future improvements:
 
 ## Security Best Practices
 
-* Enforced HTTPS at ingress level 
-* No secrets in ConfigMaps or Chart
-* Pod was giving least permission in the cluster using **securitContext** in Deployment
-* Least privilege IAM (IRSA)
-* Use Github App for short live access to repository with least permission
-* Resource limits to prevent abuse
+- Pods configured with restrictive securityContext (non-root, read-only filesystem where applicable)
+- No secrets stored in Helm charts or repositories
+- IAM Roles for Service Accounts (IRSA) for fine-grained AWS access
+- Enforced HTTPS via ingress with TLS termination
+- GitHub App authentication for secure repository access
 
 ---
 
