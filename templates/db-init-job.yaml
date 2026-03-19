@@ -8,8 +8,8 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade    # Run before Helm install/upgrade
     "helm.sh/hook-weight": "0"                 # Ensures early execution
-    "helm.sh/hook-delete-policy": hook-succeeded # delete the resources once job is complete
-    #running a database migration
+    "helm.sh/hook-delete-policy": hook-succeeded # delete the resources once job is completed
+    #Running a database migration
     #What this job do? : it just access my RDS and create a database in it for my backend application before my backend pods is installed
 spec:
   template:

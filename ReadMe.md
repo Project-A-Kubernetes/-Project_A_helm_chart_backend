@@ -16,7 +16,7 @@ It supports full lifecycle management of the backend application, including depl
 * Prometheus monitoring via ServiceMonitor
 * GitOps-ready with ArgoCD Application
 * Secrets configured with external secret operator
-* Connected to database(AWS RDS)
+* Integrated with AWS RDS (private subnet deployment)
 * Production-grade security and resource management
 
 ---
@@ -52,6 +52,7 @@ backend-helm-chart/
 │   ├── deployment.yaml
 │   ├── service.yaml
 │   ├── hpa.yaml
+|   |___ db-init-job.yaml  
 │   ├── servicemonitor.yaml
 │   ├── argocd-application.yaml
 │   └── _helpers.tpl
@@ -150,6 +151,7 @@ spec:
 ---
 ## Auto updated Helm Chart diagram
 **With CICD we update the helm repo after images has been built and push to ecr automatically**
+
 ![Kubernetes Architecture](images/image3.png)
 
 ## AWS ECR + IRSA Integration
@@ -174,9 +176,13 @@ kubectl create secret docker-registry ecr-secret \
 ## Database 
 ### database configuration
 
-- The database was automated and created with terraform .
-- database is connected to the cluster 
-- still working on this now ...
+- The database is provisioned using Terraform, ensuring consistent, reproducible infrastructure across environments.
+
+- It runs in a private subnet within the VPC, following best practices for security and network isolation.
+
+- Application connectivity is handled securely from the Kubernetes cluster using internal networking and Kubernetes Secrets.
+
+- Database initialization and schema setup are automated via a pre-install Helm hook (migration Job), ensuring the database is always ready before backend services start.
 ---
 ## Ingress Security Hardening
 **Route Traffic from ingress at PATH /api to my backend service**
