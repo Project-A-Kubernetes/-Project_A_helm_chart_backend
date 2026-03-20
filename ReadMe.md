@@ -41,6 +41,9 @@ It supports full lifecycle management of the backend application, including depl
 ![Kubernetes Architecture](images/image4.png)
 
 ---
+[🎥 Watch Project Demo](https://felix-aw-demo-video-cluster.s3.us-east-1.amazonaws.com/ScreenRecording_03-20-2026_3-35-34_AM_1.mov)
+
+---
 
 ## Repository Structure
 
